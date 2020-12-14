@@ -1,0 +1,25 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Samples.Desktop.ViewModels;assembly=Samples.Desktop"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:Samples.Desktop.Controls;assembly=Samples.Desktop"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Samples.Desktop.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Samples.Desktop">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+  <Grid ColumnDefinitions="*, 200">
+    <controls:SkiaPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" WindowRenderer="{Binding CurrentScene}" RedrawRequest="{Binding}"/>
+    <ListBox SelectedIndex="{Binding CurrentDemoIndex}" Items="{Binding DemoList}" Grid.Column="1" SelectionMode="AlwaysSelected" BorderBrush="Transparent" BorderThickness="0">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding Name}"/>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </Grid>
+</Window>
