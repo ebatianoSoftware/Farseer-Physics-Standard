@@ -2,9 +2,7 @@
 using FarseerPhysics.Factories;
 using Samples.Core.Demos.Prefabs;
 using System;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
 
 namespace Samples.Core.Demos
 {
@@ -34,15 +32,37 @@ namespace Samples.Core.Demos
 
             var edge2 = BodyFactory.CreateEdge(World, new Vector2(-10, 10), new Vector2(-5, 10));
             edge2.Friction = 0.05f;
-            edge2.CollidesWith = Category.Cat1;
+            
 
             _player.FixedRotation = true;
             _player.IsStatic = false;
             _player.Awake = true;
 
-            _player.CollidesWith = Category.All;
+            edge2.OnCollision += Edge2_OnCollision;
         }
 
+        private bool Edge2_OnCollision(Fixture fixtureA, Fixture fixtureB, FarseerPhysics.Dynamics.Contacts.Contact contact)
+        {
+            if(fixtureB.Body.LinearVelocity.Y <= 0)
+            {
+                contact.Enabled = false;
+                return false;
+            }
+
+            fixtureA.Body.GetTransform(out var transformA);
+            fixtureA.Shape.ComputeAABB(out var platAabb, ref transformA, 0);
+
+            fixtureB.Body.GetTransform(out var transformB);
+            fixtureB.Shape.ComputeAABB(out var objAabb, ref transformB, 0);
+
+            if(objAabb.UpperBound.Y - 0.1f > platAabb.UpperBound.Y)
+            {
+                contact.Enabled = false;
+                return false;
+            }
+
+            return true;
+        }
 
         protected override void OnUpdate(float delta)
         {
@@ -50,11 +70,22 @@ namespace Samples.Core.Demos
 
             if (Input.A == Core.Input.BtnState.Pressed)
             {
-                var velocity = _player.LinearVelocity;
-                velocity.Y = -15;
-                _player.LinearVelocity = velocity;
+                if (Input.Stick.Y > 0.1f)
+                {
+                    _player.CollidesWith = Category.None;
+                    _player.Position = new Vector2(_player.Position.X, _player.Position.Y + 0.15f);
+                    World.Step(0.00016f);
+                    _player.CollidesWith = Category.All;
+                }
+                else
+                {
+                    var velocity = _player.LinearVelocity;
+                    velocity.Y = -15;
+                    _player.LinearVelocity = velocity;
+                }
             }
         }
+
         protected override void OnFixedUpdate(float delta)
         {
             if (_player == null) return;
@@ -74,8 +105,6 @@ namespace Samples.Core.Demos
             velocity.X = Math.Min(20, Math.Abs(velocity.X)) * Math.Sign(velocity.X);
 
             _player.LinearVelocity = velocity;
-
-            _player.CollidesWith = velocity.Y < 0 ? Category.Cat2 : Category.All;
             base.OnFixedUpdate(delta);
         }
     }

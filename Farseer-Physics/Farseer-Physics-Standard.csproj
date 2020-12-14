@@ -19,4 +19,9 @@ The Farseer Physics Engine is an easy to use 2D physics engine that focuses on s
     <None Remove="Content\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ConvertUnits.cs" />
+    <Compile Remove="DebugViewBase.cs" />
+  </ItemGroup>
+
 </Project>
