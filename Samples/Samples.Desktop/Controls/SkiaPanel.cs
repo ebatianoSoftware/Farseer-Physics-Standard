@@ -1,10 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Skia;
 using Avalonia.Threading;
 using Samples.Core.Rendering;
+using Samples.Desktop.Input;
 
 namespace Samples.Desktop.Controls
 {
@@ -28,6 +30,75 @@ namespace Samples.Desktop.Controls
         {
             get => GetValue(RedrawRequestProperty);
             set => SetValue(RedrawRequestProperty, value);
+        }
+
+        public SkiaPanel()
+        {
+            Focusable = true;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs args)
+        {
+            base.OnKeyDown(args);
+
+            switch(args.Key)
+            {
+                case Key.Left:
+                    SimpleInput.Instance.Left = true;
+                    break;
+
+                case Key.Right:
+                    SimpleInput.Instance.Right = true;
+                    break;
+
+                case Key.Up:
+                    SimpleInput.Instance.Up = true;
+                    break;
+
+                case Key.Down:
+                    SimpleInput.Instance.Down = true;
+                    break;
+
+                case Key.X:
+                    SimpleInput.Instance.A = Core.Input.BtnState.Pressed;
+                    break;
+
+                case Key.C:
+                    SimpleInput.Instance.B = Core.Input.BtnState.Pressed;
+                    break;
+            }
+        }
+
+        protected override void OnKeyUp(KeyEventArgs args)
+        {
+            base.OnKeyDown(args);
+
+            switch (args.Key)
+            {
+                case Key.Left:
+                    SimpleInput.Instance.Left = false;
+                    break;
+
+                case Key.Right:
+                    SimpleInput.Instance.Right = false;
+                    break;
+
+                case Key.Up:
+                    SimpleInput.Instance.Up = false;
+                    break;
+
+                case Key.Down:
+                    SimpleInput.Instance.Down = false;
+                    break;
+
+                case Key.X:
+                    SimpleInput.Instance.A = Core.Input.BtnState.Released;
+                    break;
+
+                case Key.C:
+                    SimpleInput.Instance.B = Core.Input.BtnState.Released;
+                    break;
+            }
         }
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

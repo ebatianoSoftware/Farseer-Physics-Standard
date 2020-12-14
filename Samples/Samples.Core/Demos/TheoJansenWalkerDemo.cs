@@ -2,6 +2,7 @@
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Samples.Core.Demos.Prefabs;
+using System;
 using System.Numerics;
 
 namespace Samples.Core.Demos
@@ -14,10 +15,7 @@ namespace Samples.Core.Demos
         private TheoJansenWalker _walker;
         private Body[] _circles;
 
-        public TheoJansenWalkerDemo()
-        {
-            Reset();
-        }
+        static Random random = new Random();
 
         public override void Reset()
         {
@@ -38,9 +36,19 @@ namespace Samples.Core.Demos
                 _circles[i].BodyType = BodyType.Dynamic;
                 _circles[i].Position = new Vector2(-24f + 1f * i, 10f);
                 _circles[i].CreateFixture(shape);
+                _circles[i].Restitution = (float)random.NextDouble() * 0.6f;
             }
 
             _walker = new TheoJansenWalker(World, Vector2.Zero);
+        }
+
+        protected override void OnUpdate(float delta)
+        {
+            if (_walker == null) return;
+            if(!_walker.Moving)
+            {
+                _walker.Reverse();
+            }
         }
     }
 }

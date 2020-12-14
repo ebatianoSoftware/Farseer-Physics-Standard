@@ -1,5 +1,6 @@
 ﻿using Samples.Core.Demos;
 using Samples.Core.Rendering;
+using Samples.Desktop.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,15 +29,17 @@ namespace Samples.Desktop.ViewModels
         public List<DemoScene> DemoList { get; } = new List<DemoScene>();
 
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private int currentDemoIndex;
+        private int currentDemoIndex = -1;
 
         public MainWindowViewModel()
         {
-            CurrentScene = new SimpleBoxesDemo();
-            DemoList.Add(CurrentScene);
+            DemoList.Add(new SimpleBoxesDemo());
+            DemoList.Add(new RestitutionDemo());
             DemoList.Add(new JumpySpiderDemo());
             DemoList.Add(new TheoJansenWalkerDemo());
+            DemoList.Add(new SimplePlatformerDemo());
 
+            CurrentDemoIndex = 0;
 
             Task.Run(() => Loop(cancellationTokenSource.Token), cancellationTokenSource.Token);
         }
@@ -45,8 +48,8 @@ namespace Samples.Desktop.ViewModels
         {
             if (name == nameof(CurrentDemoIndex))
             {
+                DemoList[CurrentDemoIndex].Reset();
                 CurrentScene = DemoList[CurrentDemoIndex];
-                CurrentScene.Reset();
             }
         }
 
@@ -66,8 +69,14 @@ namespace Samples.Desktop.ViewModels
                 var delta = (frame - lastFrame).TotalSeconds;
                 lastFrame = frame;
 
-                CurrentScene?.Update((float)delta);
+                if (CurrentScene != null)
+                {
+                    CurrentScene.Input = SimpleInput.Instance;
+                    CurrentScene.Update((float)delta);
+                }
                 Redraw?.Invoke();
+
+                SimpleInput.Instance.Reset();
                 await Task.Delay(15);
             }
         }

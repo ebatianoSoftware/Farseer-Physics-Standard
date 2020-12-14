@@ -24,7 +24,11 @@ namespace Samples.Core.Demos.Prefabs
         private bool _motorOn;
         private float _motorSpeed;
 
+        private Vector2 pivot = new Vector2(0f, -0.8f);
+
         private Vector2 _position;
+
+        public bool Moving => _chassis.Awake;
 
         public TheoJansenWalker(World world, Vector2 position)
         {
@@ -37,8 +41,6 @@ namespace Samples.Core.Demos.Prefabs
 
             _rightShoulders = new Body[3];
             _rightLegs = new Body[3];
-
-            Vector2 pivot = new Vector2(0f, -0.8f);
 
             // Chassis
             PolygonShape box = new PolygonShape(1f);
@@ -176,6 +178,7 @@ namespace Samples.Core.Demos.Prefabs
         {
             _motorSpeed *= -1f;
             _motorJoint.MotorSpeed = _motorSpeed;
+            _chassis.Awake = true;
         }
     }
 }

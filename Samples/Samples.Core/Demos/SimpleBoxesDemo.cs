@@ -14,17 +14,13 @@ namespace Samples.Core.Demos
         private Body rectangle3;
         private Border _border;
 
-        public SimpleBoxesDemo()
-        {
-            World.Gravity = new Vector2(0, 9.82f);
-            Reset();
-        }
-
         public override void Reset()
         {
             World.ClearForces();
             World.Clear();
-            
+
+            World.Gravity = new Vector2(0, 9.82f);
+
             rectangle = BodyFactory.CreateRectangle(World, 5f, 5f, 1f, new Vector2(0, 20));
             rectangle.BodyType = BodyType.Dynamic;
 

@@ -2,6 +2,7 @@
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Common;
 using FarseerPhysics.Dynamics;
+using Samples.Core.Input;
 using Samples.Core.Rendering;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,8 @@ namespace Samples.Core.Demos
         private Vector2[] tempVertices = new Vector2[1024];
 
         protected Vector2 Size { get; set; } = new Vector2(100, 100);
+
+        public ISimpleInput Input { get; set; }
 
         protected DemoScene()
         {
@@ -139,16 +142,24 @@ namespace Samples.Core.Demos
 
         }
 
-        public virtual void Update(float delta)
+        public void Update(float delta)
         {
             const float frameTime = 0.01666666666666666666666666666667f;
             timeAccumulated += delta;
 
+            OnUpdate(delta);
             while (timeAccumulated >= frameTime)
             {
-                World.Step(frameTime);
+                OnFixedUpdate(frameTime);
                 timeAccumulated -= frameTime;
             }
+        }
+
+        protected virtual void OnUpdate(float delta) { }
+
+        protected virtual void OnFixedUpdate(float delta)
+        {
+            World.Step(delta);
         }
     }
 }
