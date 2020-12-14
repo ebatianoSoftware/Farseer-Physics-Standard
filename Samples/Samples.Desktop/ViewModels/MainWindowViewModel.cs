@@ -32,9 +32,11 @@ namespace Samples.Desktop.ViewModels
 
         public MainWindowViewModel()
         {
-            CurrentScene = new SingleFixtureDemo();
+            CurrentScene = new SimpleBoxesDemo();
             DemoList.Add(CurrentScene);
-            DemoList.Add(new SingleFixtureDemo());
+            DemoList.Add(new JumpySpiderDemo());
+            DemoList.Add(new TheoJansenWalkerDemo());
+
 
             Task.Run(() => Loop(cancellationTokenSource.Token), cancellationTokenSource.Token);
         }

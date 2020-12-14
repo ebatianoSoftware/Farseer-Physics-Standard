@@ -22,6 +22,8 @@ namespace Samples.Desktop.Controls
         public Vector2 Center { get; set; } = Vector2.Zero;
         public float Scale { get; set; } = 1;
 
+        private SKPath path = new SKPath();
+
         private Dictionary<int, SKPoint[]> pointsBuffer = new Dictionary<int, SKPoint[]>();
         private Dictionary<string, SKTypeface> typefaces = new Dictionary<string, SKTypeface>();
 
@@ -86,12 +88,12 @@ namespace Samples.Desktop.Controls
         {
             if (SetFillPaint())
             {
-                Canvas.DrawCircle(ToSKPoint(center), radius, skPaint);
+                Canvas.DrawCircle(ToSKPoint(center), radius * Scale, skPaint);
             }
             
             if (SetStrokePaint())
             {
-                Canvas.DrawCircle(ToSKPoint(center), radius, skPaint);
+                Canvas.DrawCircle(ToSKPoint(center), radius * Scale, skPaint);
             }
         }
 
@@ -118,35 +120,40 @@ namespace Samples.Desktop.Controls
 
         public void DrawPolygon(Vector2[] points, int count)
         {
-            var buffer = GetPointsBuffer(count + 1);
-            for (var idx = 0; idx < count; ++idx)
+            path.Reset();
+            path.MoveTo(ToSKPoint(points[0]));
+
+            for (var idx = 1; idx < count; ++idx)
             {
-                buffer[idx] = ToSKPoint(points[idx]);
+                path.LineTo(ToSKPoint(points[idx % count]));
             }
-            buffer[count] = buffer[0];
+            path.Close();
             
+
             if (SetFillPaint())
             {
-                Canvas.DrawPoints(SKPointMode.Polygon, buffer, skPaint);
+                Canvas.DrawPath(path, skPaint);
             }
 
             if (SetStrokePaint())
             {
-                Canvas.DrawPoints(SKPointMode.Polygon, buffer, skPaint);
+                Canvas.DrawPath(path, skPaint);
             }
         }
 
         public void DrawPolyline(Vector2[] points, int count)
         {
-            var buffer = GetPointsBuffer(count);
-            for (var idx = 0; idx < count; ++idx)
+            path.Reset();
+            path.MoveTo(ToSKPoint(points[0]));
+
+            for (var idx = 1; idx < count; ++idx)
             {
-                buffer[idx] = ToSKPoint(points[idx]);
+                path.LineTo(ToSKPoint(points[idx % count]));
             }
 
             if (SetStrokePaint())
             {
-                Canvas.DrawPoints(SKPointMode.Lines, buffer, skPaint);
+                Canvas.DrawPath(path, skPaint);
             }
         }
 

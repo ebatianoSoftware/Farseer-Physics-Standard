@@ -20,26 +20,52 @@ namespace Samples.Core.Demos
 
         private Vector2[] tempVertices = new Vector2[1024];
 
-        protected DemoScene(World world)
+        protected Vector2 Size { get; set; } = new Vector2(100, 100);
+
+        protected DemoScene()
         {
-            World = world;
+            World = new World(Vector2.Zero);
         }
 
         public virtual void Render(IRenderCanvas renderCanvas)
         {
             renderCanvas.Clear(Color.Black);
 
-            renderCanvas.Scale = 10;
+            renderCanvas.Scale = MathHelper.Min((renderCanvas.Size.Width - 10) / Size.X, (renderCanvas.Size.Height - 10) / Size.Y);
             renderCanvas.Center = Vector2.Zero;
-
-            renderCanvas.StrokeColor = Color.Green;
-            renderCanvas.StrokeThickness = 0.25f;
-            renderCanvas.FillColor = Color.Yellow;
 
             for (var idx = 0; idx <  World.BodyList.Count; ++idx)
             {
                 var body = World.BodyList[idx];
+
+                PrepareDraw(renderCanvas, body);
                 DrawBodyFixtures(renderCanvas, body.FixtureList);
+            }
+        }
+
+        private void PrepareDraw(IRenderCanvas renderCanvas, Body body)
+        {
+            renderCanvas.StrokeThickness = 1f;
+
+            if (body.IsStatic)
+            {
+                renderCanvas.StrokeColor = Color.Yellow;    
+                renderCanvas.FillColor = Color.FromArgb(128, Color.YellowGreen);
+            }
+            else if (body.BodyType == BodyType.Kinematic)
+            {
+                renderCanvas.StrokeColor = Color.White;
+                renderCanvas.FillColor = Color.FromArgb(128, Color.White);
+            }
+            else if(body.Awake)
+            {
+                renderCanvas.StrokeColor = Color.Red;
+                renderCanvas.FillColor = Color.FromArgb(128, Color.OrangeRed);
+            }
+            else
+            {
+                renderCanvas.StrokeColor = Color.Green;
+                renderCanvas.FillColor = Color.FromArgb(128, Color.SeaGreen);
             }
         }
 
@@ -113,7 +139,7 @@ namespace Samples.Core.Demos
 
         }
 
-        public void Update(float delta)
+        public virtual void Update(float delta)
         {
             const float frameTime = 0.01666666666666666666666666666667f;
             timeAccumulated += delta;
