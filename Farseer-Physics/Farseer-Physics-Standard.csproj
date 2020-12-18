@@ -11,6 +11,7 @@
 
 The Farseer Physics Engine is an easy to use 2D physics engine that focuses on simplicity, useful features and enabling the creation of fun and dynamic games.</Description>
     <RepositoryUrl>https://github.com/ebatiano/Farseer-Physics-Standard</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

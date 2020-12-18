@@ -24,6 +24,7 @@ namespace Samples.Core.Demos.Prefabs
             _anchor = BodyFactory.CreateLoopShape(world, borders);
             _anchor.CollisionCategories = Category.All;
             _anchor.CollidesWith = Category.All;
+            _anchor.Friction = 1;
         }
     }
 }

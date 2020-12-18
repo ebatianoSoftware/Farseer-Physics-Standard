@@ -1,4 +1,5 @@
-﻿using FarseerPhysics.Dynamics;
+﻿using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Samples.Core.Demos.Prefabs;
 using System;
@@ -23,15 +24,15 @@ namespace Samples.Core.Demos
             Size = new Vector2(50, 30);
             _border = new Border(World, Size);
 
-            _player = BodyFactory.CreateEllipse(World, 0.5f, 1, 16, 1, new Vector2(0, 10));
-            //FixtureFactory.AttachCircle(0.5f, 1, _player, new Vector2(0, 0.5f));
-            //FixtureFactory.AttachCircle(0.5f, 1, _player, new Vector2(0, -0.5f));
-            //FixtureFactory.AttachRectangle(1, 1, 1, new Vector2(0, 0), _player);
-
-            BodyFactory.CreateCircle(World, 2, 1, new Vector2(4, 13), BodyType.Static).Friction = 0.001f;
-
+            _player = BodyFactory.CreateCircle(World, 0.5f, 1, new Vector2(0, 10));
             var edge2 = BodyFactory.CreateEdge(World, new Vector2(-10, 10), new Vector2(-5, 10));
-            edge2.Friction = 0.05f;
+
+            var vertices = new Vertices(3);
+            vertices.Add(new Vector2(5, 12));
+            vertices.Add(new Vector2(7, 12));
+            vertices.Add(new Vector2(11, 11));
+
+            BodyFactory.CreateChainShape(World, vertices).Friction = 1;
             
 
             _player.FixedRotation = true;
@@ -91,11 +92,11 @@ namespace Samples.Core.Demos
             if (_player == null) return;
             if(Math.Abs(Input.Stick.X) > 0.1f)
             {
-                _player.Friction = 0.0f;
+                _player.FixedRotation = false;
             }
             else
             {
-                _player.Friction = 2.0f;
+                _player.FixedRotation = true;
             }
             var velocity = _player.LinearVelocity;
             
