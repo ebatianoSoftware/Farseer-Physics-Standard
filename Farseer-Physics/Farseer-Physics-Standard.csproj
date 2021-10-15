@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -10,8 +10,8 @@
     <Description>This is a clone of Farseer Physics converted to .NET Standard library using System.Numerics primitives for Vector2, etc.
 
 The Farseer Physics Engine is an easy to use 2D physics engine that focuses on simplicity, useful features and enabling the creation of fun and dynamic games.</Description>
-    <RepositoryUrl>https://github.com/ebatiano/Farseer-Physics-Standard</RepositoryUrl>
-    <Version>1.0.1</Version>
+    <RepositoryUrl>https://github.com/ebatianoSoftware/Farseer-Physics-Standard</RepositoryUrl>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,10 +23,6 @@ The Farseer Physics Engine is an easy to use 2D physics engine that focuses on s
   <ItemGroup>
     <Compile Remove="ConvertUnits.cs" />
     <Compile Remove="DebugViewBase.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
